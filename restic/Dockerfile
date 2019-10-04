@@ -1,6 +1,6 @@
 FROM debian:buster-slim
 
-RUN apt-get update && apt-get install -y bzip2 ca-certificates cron
+RUN apt-get update && apt-get install -y bzip2 ca-certificates cron tzdata
 
 ARG RESTIC_VERSION=0.9.5
 ARG PLATFORM

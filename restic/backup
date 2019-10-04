@@ -1,51 +1,44 @@
 #!/bin/sh
 
-lastLogfile="/var/log/backup-last.log"
+backupLogFile="/var/log/backup.log"
 
-copyErrorLog() {
-  cp ${lastLogfile} /var/log/backup-error-last.log
-}
-
-logLast() {
-  echo "$1" >> ${lastLogfile}
+printAndLog() {
+  echo `date "+%T %F"` "${1}" 2>&1 | tee -a ${backupLogFile}
 }
 
 start=`date +%s`
-rm -f ${lastLogfile}
-echo "Starting Backup at $(date +"%Y-%m-%d %H:%M:%S")"
-echo "Starting Backup at $(date)" >> ${lastLogfile}
-logLast "BACKUP_CRON: ${BACKUP_CRON}"
-logLast "RESTIC_BACKUP_TAGS: ${RESTIC_BACKUP_TAGS}"
-logLast "RESTIC_FORGET_ARGS: ${RESTIC_FORGET_ARGS}"
-logLast "RESTIC_JOB_ARGS: ${RESTIC_JOB_ARGS}"
-logLast "RESTIC_REPOSITORY: ${RESTIC_REPOSITORY}"
+
+printAndLog "Starting Backup"
+printAndLog "BACKUP_CRON: ${BACKUP_CRON}"
+printAndLog "RESTIC_BACKUP_TAGS: ${RESTIC_BACKUP_TAGS}"
+printAndLog "RESTIC_FORGET_ARGS: ${RESTIC_FORGET_ARGS}"
+printAndLog "RESTIC_JOB_ARGS: ${RESTIC_JOB_ARGS}"
+printAndLog "RESTIC_REPOSITORY: ${RESTIC_REPOSITORY}"
 
 # Do not save full backup log to logfile but to backup-last.log
-restic backup /restic ${RESTIC_JOB_ARGS} --tag=${RESTIC_TAG?"Missing environment variable RESTIC_TAG"} >> ${lastLogfile} 2>&1
+restic backup /mnt ${RESTIC_JOB_ARGS} --tag=${RESTIC_BACKUP_TAGS?"Missing environment variable RESTIC_TAG"} 2>&1 | tee -a ${backupLogFile}
 rc=$?
-logLast "Finished backup at $(date)"
+printAndLog "Finished backup at $(date)"
 if [[ $rc == 0 ]]; then
-    echo "Backup Successfull" 
+    printAndLog "Backup Successfull" 
 else
-    echo "Backup Failed with Status ${rc}"
+    printAndLog "Backup Failed with Status ${rc}"
     restic unlock
-    copyErrorLog
     kill 1
 fi
 
 if [ -n "${RESTIC_FORGET_ARGS}" ]; then
-    echo "Forget about old snapshots based on RESTIC_FORGET_ARGS = ${RESTIC_FORGET_ARGS}"
-    restic forget ${RESTIC_FORGET_ARGS} >> ${lastLogfile} 2>&1
+    printAndLog "Forget about old snapshots based on RESTIC_FORGET_ARGS = ${RESTIC_FORGET_ARGS}"
+    restic forget ${RESTIC_FORGET_ARGS} 2>&1 | tee -a ${backupLogFile}
     rc=$?
-    logLast "Finished forget at $(date)"
+    printAndLog "Finished forget at $(date)"
     if [[ $rc == 0 ]]; then
-        echo "Forget Successfull"
+        printAndLog "Forget Successfull"
     else
-        echo "Forget Failed with Status ${rc}"
+        printAndLog "Forget Failed with Status ${rc}"
         restic unlock
-        copyErrorLog
     fi
 fi
 
 end=`date +%s`
-echo "Finished Backup at $(date +"%Y-%m-%d %H:%M:%S") after $((end-start)) seconds"
+printAndLog "Finished Backup at $(date +"%Y-%m-%d %H:%M:%S") after $((end-start)) seconds"

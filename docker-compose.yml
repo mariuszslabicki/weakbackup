@@ -6,16 +6,16 @@ services:
       context: ./restic
     image: restic
     environment:
-      BACKUP_CRON: "0 30 3 * * *"
+      TZ: Europe/Warsaw
+      BACKUP_CRON: "* * * * *"
       RESTIC_REPOSITORY: b2:weaknet-test:/weaknet-test
-    #   RESTIC_BACKUP_SOURCES: /mnt/volumes
+      RESTIC_BACKUP_SOURCES: /mnt/volumes
       RESTIC_BACKUP_TAGS: docker-volumes
-    #   RESTIC_FORGET_ARGS: --prune --keep-last 14 --keep-daily 1
+      RESTIC_FORGET_ARGS: --prune --keep-last 14 --keep-daily 1
     env_file:
         - b2credentials.env
     volumes:
-    #   - /var/lib/docker/volumes:/mnt/volumes:ro
-    #   - /media/weakdrive/gry:/mnt/volumes/temp:ro
+        - /root/zdjecia:/mnt/backup/zdjecia:ro
         - ./restic/entrypoint:/restic/entrypoint:ro
         - ./restic/backup:/restic/backup:ro
     command: ["bash", "/restic/entrypoint"]
