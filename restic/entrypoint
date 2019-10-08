@@ -28,11 +28,7 @@ else
 fi
 
 printAndLog "`date "+%T %F"` Setup backup cron job with cron expression BACKUP_CRON: ${BACKUP_CRON}"
-echo "${BACKUP_CRON} /bin/sh /restic/backup 2>&1" >> /var/spool/cron/crontabs/root
-echo "#" >> /var/spool/cron/crontabs/root
 
 printAndLog "`date "+%T %F"` Container started."
-
-service cron start
 
 tail -f /dev/null

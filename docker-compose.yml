@@ -7,21 +7,30 @@ services:
     image: restic
     environment:
       TZ: Europe/Warsaw
-      BACKUP_CRON: "* * * * *"
       RESTIC_REPOSITORY: b2:weaknet-test:/weaknet-test
       RESTIC_BACKUP_SOURCES: /mnt/volumes
       RESTIC_BACKUP_TAGS: docker-volumes
-      RESTIC_FORGET_ARGS: --prune --keep-last 14 --keep-daily 1
+      RESTIC_FORGET_ARGS: '--prune\ --keep-last\ 14\ --keep-daily\ 1'
     env_file:
         - b2credentials.env
     volumes:
         - /root/zdjecia:/mnt/backup/zdjecia:ro
         - ./restic/entrypoint:/restic/entrypoint:ro
         - ./restic/backup:/restic/backup:ro
-    command: ["bash", "/restic/entrypoint"]
+    entrypoint: bash /restic/entrypoint
     networks:
       - backup-net
   
+  ofelia:
+    image: mcuadros/ofelia:latest
+    volumes:
+      - ./ofelia/config.ini:/etc/ofelia/config.ini
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - backup-net
+
   cadvisor:
     image: google/cadvisor:latest
     ports:
