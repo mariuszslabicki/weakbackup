@@ -1,33 +1,38 @@
-#!bin/sh
+#!/bin/sh
 
-echo "Starting container ..."
+backupLogFile="/var/log/backup.log"
+
+printAndLog() {
+  echo `date "+%T %F"` "${1}" 2>&1 | tee -a ${backupLogFile}
+}
+
+printAndLog "`date "+%T %F"` Starting container ..."
 
 restic snapshots &>/dev/null
 status=$?
-echo "Check Repo status $status"
+printAndLog "`date "+%T %F"` Check Repo status $status"
 
 if [ $status != 0 ]; then
-    echo "Restic repository '${RESTIC_REPOSITORY}' does not exists. Running restic init."
-    restic init
+    printAndLog "`date "+%T %F"` Restic repository '${RESTIC_REPOSITORY}' does not exists. Running restic init."
+    restic init 2>&1 | tee -a ${backupLogFile}
 
     init_status=$?
-    echo "Repo init status $init_status"
+    printAndLog "`date "+%T %F"` Repo init status $init_status"
 
     if [ $init_status != 0 ]; then
-        echo "Failed to init the repository: '${RESTIC_REPOSITORY}'"
+        printAndLog "`date "+%T %F"` Failed to init the repository: '${RESTIC_REPOSITORY}'"
         exit 1
     fi
 else
-    echo "Repository exists"
-
+    printAndLog "`date "+%T %F"` Repository exists"
 fi
 
-echo "Setup backup cron job with cron expression BACKUP_CRON: ${BACKUP_CRON}"
-echo "${BACKUP_CRON} /bin/backup >> /var/log/cron.log 2>&1" > /var/spool/cron/crontabs/root
+printAndLog "`date "+%T %F"` Setup backup cron job with cron expression BACKUP_CRON: ${BACKUP_CRON}"
+echo "${BACKUP_CRON} /bin/sh /restic/backup 2>&1" >> /var/spool/cron/crontabs/root
+echo "#" >> /var/spool/cron/crontabs/root
 
-# Make sure the file exists before we start tail
-touch /var/log/cron.log
+printAndLog "`date "+%T %F"` Container started."
 
-echo "Container started."
+service cron start
 
 tail -f /dev/null
