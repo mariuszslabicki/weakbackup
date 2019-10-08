@@ -9,36 +9,35 @@ printAndLog() {
 start=`date +%s`
 
 printAndLog "Starting Backup"
-printAndLog "BACKUP_CRON: ${BACKUP_CRON}"
 printAndLog "RESTIC_BACKUP_TAGS: ${RESTIC_BACKUP_TAGS}"
 printAndLog "RESTIC_FORGET_ARGS: ${RESTIC_FORGET_ARGS}"
 printAndLog "RESTIC_JOB_ARGS: ${RESTIC_JOB_ARGS}"
 printAndLog "RESTIC_REPOSITORY: ${RESTIC_REPOSITORY}"
 
-# Do not save full backup log to logfile but to backup-last.log
-restic backup /mnt ${RESTIC_JOB_ARGS} --tag=${RESTIC_BACKUP_TAGS?"Missing environment variable RESTIC_TAG"} 2>&1 | tee -a ${backupLogFile}
-rc=$?
-printAndLog "Finished backup at $(date)"
-if [[ $rc == 0 ]]; then
-    printAndLog "Backup Successfull" 
-else
-    printAndLog "Backup Failed with Status ${rc}"
-    restic unlock
-    kill 1
-fi
+# # Do not save full backup log to logfile but to backup-last.log
+# restic backup /mnt ${RESTIC_JOB_ARGS} --tag=${RESTIC_BACKUP_TAGS?"Missing environment variable RESTIC_TAG"} 2>&1 | tee -a ${backupLogFile}
+# rc=$?
+# printAndLog "Finished backup at $(date)"
+# if [[ $rc == 0 ]]; then
+#     printAndLog "Backup Successfull" 
+# else
+#     printAndLog "Backup Failed with Status ${rc}"
+#     restic unlock
+#     kill 1
+# fi
 
-if [ -n "${RESTIC_FORGET_ARGS}" ]; then
-    printAndLog "Forget about old snapshots based on RESTIC_FORGET_ARGS = ${RESTIC_FORGET_ARGS}"
-    restic forget ${RESTIC_FORGET_ARGS} 2>&1 | tee -a ${backupLogFile}
-    rc=$?
-    printAndLog "Finished forget at $(date)"
-    if [[ $rc == 0 ]]; then
-        printAndLog "Forget Successfull"
-    else
-        printAndLog "Forget Failed with Status ${rc}"
-        restic unlock
-    fi
-fi
+# if [ -n "${RESTIC_FORGET_ARGS}" ]; then
+#     printAndLog "Forget about old snapshots based on RESTIC_FORGET_ARGS = ${RESTIC_FORGET_ARGS}"
+#     restic forget ${RESTIC_FORGET_ARGS} 2>&1 | tee -a ${backupLogFile}
+#     rc=$?
+#     printAndLog "Finished forget at $(date)"
+#     if [[ $rc == 0 ]]; then
+#         printAndLog "Forget Successfull"
+#     else
+#         printAndLog "Forget Failed with Status ${rc}"
+#         restic unlock
+#     fi
+# fi
 
 end=`date +%s`
 printAndLog "Finished Backup at $(date +"%Y-%m-%d %H:%M:%S") after $((end-start)) seconds"
