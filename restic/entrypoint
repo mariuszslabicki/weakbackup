@@ -27,8 +27,6 @@ else
     printAndLog "`date "+%T %F"` Repository exists"
 fi
 
-printAndLog "`date "+%T %F"` Setup backup cron job with cron expression BACKUP_CRON: ${BACKUP_CRON}"
-
 printAndLog "`date "+%T %F"` Container started."
 
 tail -f /dev/null
