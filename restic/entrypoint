@@ -1,6 +1,6 @@
 #!/bin/sh
 
-backupLogFile="/var/log/backup.log"
+backupLogFile="/var/log/restic/backup.log"
 
 printAndLog() {
   echo `date "+%T %F"` "${1}" 2>&1 | tee -a ${backupLogFile}
