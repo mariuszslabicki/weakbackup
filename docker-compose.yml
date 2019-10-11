@@ -17,6 +17,8 @@ services:
         - /root/zdjecia:/mnt/backup/zdjecia:ro
         - ./restic/entrypoint:/restic/entrypoint:ro
         - ./restic/backup:/restic/backup:ro
+        - ./promtail/docker-config.yaml:/etc/promtail/docker-config.yaml
+        - BackupLogs:/var/log/restic
     entrypoint: bash /restic/entrypoint
     networks:
       - backup-net
@@ -28,6 +30,23 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+    networks:
+      - backup-net
+
+  loki:
+    image: grafana/loki:master
+    ports:
+      - "3100:3100"
+    # command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - backup-net
+  
+  promtail:
+    image: grafana/promtail:master
+    volumes:
+      - BackupLogs:/var/log/restic
+      - ./promtail/docker-config.yaml:/etc/promtail/docker-config.yaml
+    command: -config.file=/etc/promtail/docker-config.yaml
     networks:
       - backup-net
 
@@ -86,6 +105,9 @@ services:
       - 9100
     networks:
       - backup-net
+
+volumes:
+  BackupLogs:
 
 networks:
   backup-net:
