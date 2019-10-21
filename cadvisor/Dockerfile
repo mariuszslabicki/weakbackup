@@ -9,7 +9,7 @@ RUN make build
 FROM alpine
 
 # Grab cadvisor from the staging directory.
-COPY --from=builder /go/src/github.com/google/cadvisor /usr/bin/cadvisor
+COPY --from=builder /go/src/github.com/google/cadvisor /usr/bin/
 
 EXPOSE 8080
 
