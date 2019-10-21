@@ -4,7 +4,7 @@ ARCH := $(shell uname -m)
 ifeq ($(ARCH), x86_64)
 PLATFORM_MAKE := amd64
 endif
-ifeq ($(UNAME), aarch64)
+ifeq ($(ARCH), aarch64)
 PLATFORM_MAKE := arm64
 endif
 
