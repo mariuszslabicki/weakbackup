@@ -51,7 +51,10 @@ services:
       - backup-net
 
   cadvisor:
-    image: google/cadvisor:latest
+    # image: google/cadvisor:latest
+    build: 
+      context: ./cadvisor
+    image: cadvisor
     ports:
       - 8080:8080
     volumes:
