@@ -29,4 +29,6 @@ fi
 
 printAndLog "`date "+%T %F"` Container started."
 
+./backup
+
 tail -f /dev/null
