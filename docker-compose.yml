@@ -5,6 +5,7 @@ services:
     build: 
       context: ./restic
     image: restic
+    container_name: restic
     environment:
       TZ: Europe/Warsaw
       RESTIC_REPOSITORY: b2:weaknet-test:/weaknet-test
@@ -14,7 +15,7 @@ services:
     env_file:
         - b2credentials.env
     volumes:
-        - /root/zdjecia:/mnt/backup/zdjecia:ro
+        # - /root/zdjecia:/mnt/backup/zdjecia:ro
         - ./restic/entrypoint:/restic/entrypoint:ro
         - ./restic/backup:/restic/backup:ro
         - ./promtail/docker-config.yaml:/etc/promtail/docker-config.yaml
@@ -32,14 +33,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
     networks:
       - backup-net
-
-  loki:
-    image: grafana/loki:master
-    ports:
-      - "3100:3100"
-    # command: -config.file=/etc/loki/local-config.yaml
-    networks:
-      - backup-net
   
   promtail:
     image: grafana/promtail:master
@@ -47,66 +40,6 @@ services:
       - BackupLogs:/var/log/restic
       - ./promtail/docker-config.yaml:/etc/promtail/docker-config.yaml
     command: -config.file=/etc/promtail/docker-config.yaml
-    networks:
-      - backup-net
-
-  cadvisor:
-    # image: google/cadvisor:latest
-    build: 
-      context: ./cadvisor
-    image: cadvisor
-    ports:
-      - 8080:8080
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    networks:
-      - backup-net
-
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - ./prometheus/:/etc/prometheus/
-    #   - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      # - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-    ports:
-      - 9090:9090
-    # links:
-    #   - cadvisor:cadvisor
-    #   - alertmanager:alertmanager
-    depends_on:
-      - cadvisor
-      - node-exporter
-    networks:
-      - backup-net
-
-  grafana:
-    image: grafana/grafana
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
-      - ./grafana/config.ini:/etc/grafana/config.ini
-      - ./grafana/provisioning/datasources/prometheus.yaml:/etc/grafana/provisioning/datasources/prometheus.yaml
-      - ./grafana/provisioning/dashboards/all.yaml:/etc/grafana/provisioning/dashboards/all.yaml
-    depends_on:
-      - prometheus
-    networks:
-      - backup-net
-
-  node-exporter:
-    image: prom/node-exporter:latest
-    container_name: monitoring_node_exporter
-    restart: unless-stopped
-    expose:
-      - 9100
     networks:
       - backup-net
 
