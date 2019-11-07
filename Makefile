@@ -26,7 +26,7 @@ restart:
 	@docker-compose up -d
 
 connect:
-	docker exec -it weakbackup_restic_1 /bin/bash
+	docker exec -it restic /bin/bash
 
 clean:
 	@docker system prune --volumes --force

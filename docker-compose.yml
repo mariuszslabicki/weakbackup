@@ -26,6 +26,7 @@ services:
   
   ofelia:
     image: mcuadros/ofelia:latest
+    container_name: ofelia
     volumes:
       - ./ofelia/config.ini:/etc/ofelia/config.ini
       - /var/run/docker.sock:/var/run/docker.sock
@@ -36,6 +37,7 @@ services:
   
   promtail:
     image: grafana/promtail:master
+    container_name: backup-promtail
     volumes:
       - BackupLogs:/var/log/restic
       - ./promtail/docker-config.yaml:/etc/promtail/docker-config.yaml
