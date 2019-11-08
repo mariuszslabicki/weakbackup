@@ -49,7 +49,7 @@ volumes:
   BackupLogs:
 
 networks:
-  backup-net:
+  net:
     external:
       name: weakmonitor_net
 
