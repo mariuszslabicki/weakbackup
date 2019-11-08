@@ -1,0 +1,6 @@
+version: "3.3"
+
+services:
+  restic:
+    volumes:
+        # - /local/path/directoryname:/mnt/backup/directoryname:ro

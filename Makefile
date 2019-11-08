@@ -13,7 +13,7 @@ build:
  
 start:
 	$(info Make: Starting environment containers.)
-	@docker-compose up -d
+	@docker-compose -f docker-compose.yml -f backup-dirs.yml up -d
  
 stop:
 	$(info Make: Stopping environment containers.)
