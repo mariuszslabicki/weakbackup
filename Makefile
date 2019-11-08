@@ -23,7 +23,7 @@ restart:
 	$(info Make: Restarting environment containers.)
 	@docker-compose stop
 	@docker-compose rm -f -v
-	@docker-compose up -d
+	@docker-compose -f docker-compose.yml -f backup-dirs.yml up -d
 
 connect:
 	docker exec -it WB-restic /bin/bash
