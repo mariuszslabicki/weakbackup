@@ -25,5 +25,5 @@ scrape_configs:
     - targets:
         - localhost
       labels:
-        job: weakbackup_weakrestic_1
+        job: weakbackup
         __path__: /var/log/restic/backup.log
