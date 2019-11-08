@@ -22,7 +22,7 @@ services:
         - BackupLogs:/var/log/restic
     entrypoint: bash /restic/entrypoint
     networks:
-      - backup-net
+      - net
   
   ofelia:
     image: mcuadros/ofelia:latest
@@ -33,7 +33,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     networks:
-      - backup-net
+      - net
   
   promtail:
     image: grafana/promtail:master
@@ -43,10 +43,13 @@ services:
       - ./promtail/docker-config.yaml:/etc/promtail/docker-config.yaml
     command: -config.file=/etc/promtail/docker-config.yaml
     networks:
-      - backup-net
+      - net
 
 volumes:
   BackupLogs:
 
 networks:
   backup-net:
+    external:
+      name: weakmonitor_net
+
