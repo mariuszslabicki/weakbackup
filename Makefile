@@ -26,7 +26,7 @@ restart:
 	@docker-compose up -d
 
 connect:
-	docker exec -it restic /bin/bash
+	docker exec -it WB-restic /bin/bash
 
 clean:
 	@docker system prune --volumes --force

@@ -5,7 +5,7 @@ services:
     build: 
       context: ./restic
     image: restic
-    container_name: restic
+    container_name: WB-restic
     environment:
       TZ: Europe/Warsaw
       RESTIC_REPOSITORY: b2:weaknet-test:/weaknet-test
@@ -26,7 +26,7 @@ services:
   
   ofelia:
     image: mcuadros/ofelia:latest
-    container_name: ofelia
+    container_name: WB-ofelia
     volumes:
       - ./ofelia/config.ini:/etc/ofelia/config.ini
       - /var/run/docker.sock:/var/run/docker.sock
@@ -37,7 +37,7 @@ services:
   
   promtail:
     image: grafana/promtail:master
-    container_name: backup-promtail
+    container_name: WB-promtail
     volumes:
       - BackupLogs:/var/log/restic
       - ./promtail/docker-config.yaml:/etc/promtail/docker-config.yaml

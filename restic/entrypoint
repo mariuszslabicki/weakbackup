@@ -6,29 +6,27 @@ printAndLog() {
   echo `date "+%T %F"` "${1}" 2>&1 | tee -a ${backupLogFile}
 }
 
-printAndLog "`date "+%T %F"` Starting container ..."
+printAndLog "Starting container ..."
 
 restic snapshots &>/dev/null
 status=$?
-printAndLog "`date "+%T %F"` Check Repo status $status"
+printAndLog "Check Repo status $status"
 
 if [ $status != 0 ]; then
-    printAndLog "`date "+%T %F"` Restic repository '${RESTIC_REPOSITORY}' does not exists. Running restic init."
+    printAndLog "Restic repository '${RESTIC_REPOSITORY}' does not exists. Running restic init."
     restic init 2>&1 | tee -a ${backupLogFile}
 
     init_status=$?
-    printAndLog "`date "+%T %F"` Repo init status $init_status"
+    printAndLog "Repo init status $init_status"
 
     if [ $init_status != 0 ]; then
-        printAndLog "`date "+%T %F"` Failed to init the repository: '${RESTIC_REPOSITORY}'"
+        printAndLog "Failed to init the repository: '${RESTIC_REPOSITORY}'"
         exit 1
     fi
 else
-    printAndLog "`date "+%T %F"` Repository exists"
+    printAndLog "Repository exists"
 fi
 
-printAndLog "`date "+%T %F"` Container started."
-
-./backup
+printAndLog "Container started."
 
 tail -f /dev/null
