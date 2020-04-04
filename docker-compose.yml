@@ -24,17 +24,6 @@ services:
     networks:
       - net
   
-  ofelia:
-    image: mcuadros/ofelia:latest
-    container_name: WB-ofelia
-    volumes:
-      - ./ofelia/config.ini:/etc/ofelia/config.ini
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - net
-  
   promtail:
     image: grafana/promtail:master
     container_name: WB-promtail
