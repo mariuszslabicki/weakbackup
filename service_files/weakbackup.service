@@ -1,0 +1,12 @@
+[Unit]
+Description=Weakbackup
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start restic
+ExecStop=/usr/bin/docker stop restic
+
+[Install]
+WantedBy=local.target
