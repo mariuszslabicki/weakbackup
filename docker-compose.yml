@@ -15,15 +15,13 @@ services:
     env_file:
         - b2credentials.env
     volumes:
-        # - /root/zdjecia:/mnt/backup/zdjecia:ro
         - ./restic/entrypoint:/restic/entrypoint:ro
         - ./restic/backup:/restic/backup:ro
-        - ./promtail/docker-config.yaml:/etc/promtail/docker-config.yaml
         - BackupLogs:/var/log/restic
     entrypoint: bash /restic/entrypoint
     networks:
       - net
-  
+
   promtail:
     image: grafana/promtail:master
     container_name: WB-promtail
