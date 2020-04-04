@@ -16,7 +16,6 @@ services:
         - b2credentials.env
     volumes:
         - ./restic/entrypoint:/restic/entrypoint:ro
-        - ./restic/backup:/restic/backup:ro
         - BackupLogs:/var/log/restic
     entrypoint: bash /restic/entrypoint
     networks:

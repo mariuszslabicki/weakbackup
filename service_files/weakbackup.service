@@ -4,9 +4,7 @@ Requires=docker.service
 After=docker.service
 
 [Service]
-Restart=always
 ExecStart=/usr/bin/docker start WB-restic
-ExecStop=/usr/bin/docker stop WB-restic
 
 [Install]
 WantedBy=local.target

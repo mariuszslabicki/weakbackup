@@ -1,0 +1,7 @@
+[Unit]
+Description=Weakbackup Timer
+Requires=docker.service
+
+[Timer]
+OnCalendar=*-*-* 01:00:00
+Persistent=true
