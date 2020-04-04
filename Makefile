@@ -18,6 +18,10 @@ start:
 stop:
 	$(info Make: Stopping environment containers.)
 	@docker-compose stop
+
+backup_now:
+	$(info Make: I am starting backup now.)
+	@docker start WB-restic
  
 restart:
 	$(info Make: Restarting environment containers.)
