@@ -6,6 +6,9 @@ services:
       context: ./restic
     image: restic
     container_name: WB-restic
+    depends_on: 
+      - WB-promtail
+    restart: "no"
     environment:
       TZ: Europe/Warsaw
       RESTIC_REPOSITORY: b2:weaknet-test:/weaknet-test
@@ -21,9 +24,10 @@ services:
     networks:
       - net
 
-  promtail:
+  WB-promtail:
     image: grafana/promtail:master
     container_name: WB-promtail
+    restart: "no"
     volumes:
       - BackupLogs:/var/log/restic
       - ./promtail/docker-config.yaml:/etc/promtail/docker-config.yaml
