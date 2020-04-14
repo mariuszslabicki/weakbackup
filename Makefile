@@ -1,16 +1,8 @@
 COMPOSE_FILE_PATH := -f docker-compose.yml 
-ARCH := $(shell uname -m)
 PWD := $(shell pwd)
 
-ifeq ($(ARCH), x86_64)
-PLATFORM_MAKE := amd64
-endif
-ifeq ($(ARCH), aarch64)
-PLATFORM_MAKE := arm64
-endif
-
 build:
-	@docker-compose build --build-arg PLATFORM=${PLATFORM_MAKE}
+	@docker-compose build
  
  deploy_systemd_files:
 	$(info Make: Copying systemd service files.)
