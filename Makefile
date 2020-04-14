@@ -2,7 +2,7 @@ COMPOSE_FILE_PATH := -f docker-compose.yml
 PWD := $(shell pwd)
 
 build:
-	@docker-compose build
+	@docker-compose build --force-rm --no-cache 
  
  deploy_systemd_files:
 	$(info Make: Copying systemd service files.)
