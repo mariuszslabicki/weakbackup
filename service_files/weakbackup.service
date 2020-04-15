@@ -4,8 +4,8 @@ Requires=docker.service
 After=docker.service
 
 [Service]
-ExecStartPre=/usr/bin/docker start WB-promtail
-ExecStart=/usr/bin/docker start WB-restic
+# ExecStartPre=/usr/bin/docker start WB-promtail
+ExecStart=/usr/bin/docker exec WB-restic bash /restic/backup.sh
 
 [Install]
 WantedBy=multi-user.target

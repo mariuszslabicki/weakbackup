@@ -27,7 +27,7 @@ stop:
 
 backup_now:
 	$(info Make: I am starting backup now.)
-	@docker start WB-restic
+	docker exec WB-restic bash /restic/backup.sh
  
 browse_backup:
 	@docker run -a stdin -a stdout -i -t --env-file b2credentials.env \

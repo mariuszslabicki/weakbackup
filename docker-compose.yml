@@ -8,7 +8,7 @@ services:
     container_name: WB-restic
     depends_on: 
       - WB-promtail
-    restart: "no"
+    restart: always
     environment:
       TZ: Europe/Warsaw
       RESTIC_REPOSITORY: b2:weaknet-test:/weaknet-test
@@ -18,16 +18,16 @@ services:
     env_file:
         - b2credentials.env
     volumes:
-        - ./restic/entrypoint:/restic/entrypoint:ro
+        - ./restic/backup.sh:/restic/backup.sh:ro
         - BackupLogs:/var/log/restic
-    entrypoint: bash /restic/entrypoint
+    entrypoint: tail -f /dev/null
     networks:
       - net
 
   WB-promtail:
     image: grafana/promtail:master
     container_name: WB-promtail
-    restart: "no"
+    restart: always
     volumes:
       - BackupLogs:/var/log/restic
       - ./promtail/docker-config.yaml:/etc/promtail/docker-config.yaml

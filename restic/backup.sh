@@ -6,7 +6,7 @@ printAndLog() {
   echo `date "+%T %F"` "${1}" 2>&1 | tee -a ${backupLogFile}
 }
 
-printAndLog "Starting container ..."
+printAndLog "Starting backup script ..."
 
 restic snapshots &>/dev/null
 status=$?
