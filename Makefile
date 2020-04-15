@@ -9,7 +9,9 @@ build:
 	sudo cp service_files/weakbackup.service /etc/systemd/system/weakbackup.service
 	sudo cp service_files/weakbackup.timer /etc/systemd/system/weakbackup.timer
 	sudo systemctl daemon-reload
-	sudo systemctl restart weakbackup
+	sudo systemctl restart weakbackup.service
+	sudo systemctl restart weakbackup.timer
+	sudo systemctl enable weakbackup.timer
 
 deploy:
 	$(info Make: Create environment containers.)
