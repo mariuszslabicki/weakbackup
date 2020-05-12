@@ -48,7 +48,7 @@ clean:
 	@docker system prune --volumes --force
 
 run_debug:
-	@docker-compose run restic bash
+	docker run --rm -it --entrypoint /bin/bash restic
 
 logs:
 	@docker-compose logs
