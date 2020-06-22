@@ -4,7 +4,7 @@ PWD := $(shell pwd)
 build:
 	@docker-compose build --force-rm --no-cache 
  
- deploy_systemd_files:
+deploy_systemd_files:
 	$(info Make: Copying systemd service files.)
 	sudo cp service_files/weakbackup.service /etc/systemd/system/weakbackup.service
 	sudo cp service_files/weakbackup.timer /etc/systemd/system/weakbackup.timer
