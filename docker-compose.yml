@@ -11,9 +11,6 @@ services:
     restart: always
     environment:
       TZ: Europe/Warsaw
-      RESTIC_REPOSITORY: b2:weaknet-photos
-      RESTIC_BACKUP_SOURCES: /mnt/volumes
-      RESTIC_BACKUP_TAGS: docker-volumes
       RESTIC_FORGET_ARGS: --prune --keep-last 14 --keep-daily 1
     env_file:
         - b2credentials.env
