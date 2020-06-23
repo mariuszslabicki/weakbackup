@@ -39,7 +39,7 @@ printAndLog "RESTIC_FORGET_ARGS: ${RESTIC_FORGET_ARGS}"
 printAndLog "RESTIC_REPOSITORY: ${RESTIC_REPOSITORY}"
 
 # Do not save full backup log to logfile but to backup-last.log
-restic backup /mnt --tag=${RESTIC_BACKUP_TAGS} 2>&1 | tee -a ${backupLogFile}
+restic backup /mnt/backup --tag=${RESTIC_BACKUP_TAGS} 2>&1 | tee -a ${backupLogFile}
 rc=$?
 printAndLog "Finished backup at $(date)"
 if [ $rc != 0 ]; then

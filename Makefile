@@ -32,7 +32,6 @@ backup_now:
 browse_backup:
 	@docker run -a stdin -a stdout -i -t --env-file b2credentials.env \
 	--device /dev/fuse --cap-add SYS_ADMIN \
-	--mount type=bind,source=${PWD}/restic/browse_backup,target=/mnt/browse_backup \
 	restic /bin/bash
 
 restart:
