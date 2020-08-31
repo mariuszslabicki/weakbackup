@@ -30,7 +30,10 @@ backup_now:
 	docker exec WB-restic bash /restic/backup.sh
  
 browse_backup:
-	@docker run -a stdin -a stdout -i -t --env-file b2credentials.env \
+	@echo "apt update && apt install fuse screen mc -y"
+	@echo "mkdir /mnt/backup"
+	@echo "restic -r b2:b2:weaknet-photos mount /mnt/backup"
+	@docker run --rm -a stdin -a stdout -i -t --env-file b2credentials.env \
 	--device /dev/fuse --cap-add SYS_ADMIN \
 	restic /bin/bash
 
